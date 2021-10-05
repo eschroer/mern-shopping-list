@@ -21,14 +21,14 @@ function ShoppingList(props) {
     <Container>
         <ListGroup>
             <TransitionGroup className="shopping-list">
-                {items.map(({id, name}) => (
-                   <CSSTransition key={id} timeout={500} classNames="fade">
+                {items.map(({_id, name}) => (
+                   <CSSTransition key={_id} timeout={500} classNames="fade">
                         <ListGroupItem>
                             <Button 
                                 className="remove-btn" 
                                 color="danger" 
                                 size="sm" 
-                                onClick={onDeleteClick.bind(this, id)}>
+                                onClick={onDeleteClick.bind(this, _id)}>
                                 &times;
                             </Button>
                             {name}
