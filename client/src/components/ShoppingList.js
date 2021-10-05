@@ -1,32 +1,24 @@
-import {setState, useEffect} from 'react';
+import {useEffect} from 'react';
 import {Container, ListGroup, ListGroupItem, Button} from 'reactstrap';
 import { CSSTransition, TransitionGroup} from 'react-transition-group';
-import {v4 as uuid} from 'uuid';
 import {connect } from 'react-redux';
-import {getItems} from '../actions/itemActions';
+import {getItems, deleteItem} from '../actions/itemActions';
 import PropTypes from 'prop-types'
 
 function ShoppingList(props) {
   
     useEffect(() => {
         props.getItems()
-    })
+    }, [])
     const {items} = props.item
+
+    const onDeleteClick = (id) => {
+        props.deleteItem(id)
+    }
 
     return(
         
     <Container>
-        <Button color="dark" style={{marginBottom: '2rem'}} onClick={() => {
-            const name = prompt('Enter Item');
-            if(name) {
-                setState(item => (
-                    [...items, {id: uuid(), name: name}]
-                ))
-                return items
-            }
-            }}>
-            Add Item
-        </Button>
         <ListGroup>
             <TransitionGroup className="shopping-list">
                 {items.map(({id, name}) => (
@@ -36,9 +28,7 @@ function ShoppingList(props) {
                                 className="remove-btn" 
                                 color="danger" 
                                 size="sm" 
-                                onClick={() => {
-                                setState(items.filter((item) => item.id !== id)
-                                )}}>
+                                onClick={onDeleteClick.bind(this, id)}>
                                 &times;
                             </Button>
                             {name}
@@ -53,6 +43,7 @@ function ShoppingList(props) {
 
 ShoppingList.propTypes = {
     getItems: PropTypes.func.isRequired,
+    deleteItem: PropTypes.func.isRequired,
     item: PropTypes.object.isRequired
 }
 
@@ -60,4 +51,4 @@ const mapStateToProps = (state) => ({
     item: state.item
 })
 
-export default connect(mapStateToProps, {getItems})(ShoppingList)
+export default connect(mapStateToProps, {getItems, deleteItem})(ShoppingList)
